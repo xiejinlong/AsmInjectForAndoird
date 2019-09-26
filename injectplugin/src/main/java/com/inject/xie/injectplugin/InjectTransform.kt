@@ -8,10 +8,7 @@ import org.gradle.api.Project
 import com.android.build.api.transform.TransformInput
 import com.android.build.gradle.tasks.factory.AbstractCompilesUtil.isIncremental
 import com.android.build.api.transform.TransformOutputProvider
-
-
-
-
+import com.inject.xie.injectplugin.uitls.collection.InputCollectionHelper
 
 
 class InjectTransform(var project: Project) : Transform() {
@@ -23,7 +20,7 @@ class InjectTransform(var project: Project) : Transform() {
 
 
     override fun transform(transformInvocation: TransformInvocation?) {
-        super.transform(transformInvocation)
+         super.transform(transformInvocation)
         transformInvocation ?: return
         val outputProvider = transformInvocation.outputProvider
         val inputs = transformInvocation.inputs
@@ -32,6 +29,7 @@ class InjectTransform(var project: Project) : Transform() {
         if (!isIncremental) {
             outputProvider.deleteAll()
         }
+        InputCollectionHelper.generateInput(inputs as MutableList<TransformInput>)
     }
 
 

@@ -1,10 +1,15 @@
 package com.inject.xie.injectplugin.uitls.collection
 
+import com.android.build.api.transform.DirectoryInput
 import com.android.build.api.transform.JarInput
 import com.android.build.api.transform.TransformInput
+import com.inject.xie.injectplugin.asm.collector.AnnotationCollector
 import com.inject.xie.injectplugin.uitls.LogUtil
+import org.gradle.api.file.Directory
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
@@ -13,20 +18,29 @@ object InputCollectionHelper {
 
 
 
-    fun generateInput(inputs: List<TransformInput>) {
+    fun generateInput(inputs: MutableList<TransformInput>) {
         //工程目录下，所有输入
         inputs.forEach { input ->
             input.jarInputs.forEach {
-                it.file
+                generateFromJar(it)
             }
             input.directoryInputs.forEach {
-
+                generateFromFile(it)
             }
 
         }
     }
 
     val TAG_END_JAR = ".jar"
+
+    fun generateFromFile(input: DirectoryInput) {
+        val file = input.file
+        file.walk().iterator().forEach {
+            if (needContinueCollection(it.name)) {
+                AnnotationCollector().collectFromInputStream(FileInputStream(it))
+            }
+        }
+    }
 
     fun generateFromJar(jarInput: JarInput) {
         LogUtil.debug("generateFromJar -> ${jarInput.name}")
@@ -40,16 +54,16 @@ object InputCollectionHelper {
                 val entry = enumeration.nextElement()
                 val zipEntry = ZipEntry(entry.name)
                 val inputStream = jarFile.getInputStream(entry)
-                if (needContinueCollection(entry)) {
-
+                if (needContinueCollection(entry.name)) {
+                    AnnotationCollector().collectFromInputStream(inputStream)
                 }
             }
         }
     }
 
-    private fun needContinueCollection(entry: ZipEntry): Boolean {
-        return entry.name.endsWith(".class") && !entry.name.contains("R\$")
-                && !entry.name.contains("R.class") && !entry.name.contains("BuildConfig.class")
+    private fun needContinueCollection(fileName: String): Boolean {
+        return fileName.endsWith(".class") && !fileName.contains("R\$")
+                && !fileName.contains("R.class") && !fileName.contains("BuildConfig.class")
     }
 
 }

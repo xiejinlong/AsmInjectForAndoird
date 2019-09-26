@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url '/Users/xie/test/' }
+        maven { url '/Users/xiejinlong/test/' }
         mavenLocal()
     }
     dependencies {
@@ -24,6 +24,8 @@ allprojects {
         
     }
 }
+
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir
