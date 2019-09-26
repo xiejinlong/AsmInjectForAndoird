@@ -11,13 +11,13 @@ repositories.mavenCentral()
 repositories {
     google()
     jcenter()
-    maven { url '../../test' }
+    maven { url '/Users/xiejinlong/test/' }
     mavenLocal()
 }
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: uri('../../test'))
+        repository(url: uri('/Users/xiejinlong/test'))
     }
 }
 compileGroovy {

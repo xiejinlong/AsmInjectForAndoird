@@ -9,7 +9,7 @@ repositories.mavenCentral()
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: uri('../../test'))
+        repository(url: uri('/Users/xiejinlong/test'))
     }
 }
 
