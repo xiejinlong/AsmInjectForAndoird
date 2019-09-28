@@ -4,19 +4,42 @@ import com.inject.xie.injectplugin.uitls.LogUtil
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Opcodes.ASM5
 
-class CollectorAnnotationVisitor(desc: String?, visible: Boolean): AnnotationVisitor(ASM5) {
+class CollectorAnnotationVisitor(var method: InjectMethod): AnnotationVisitor(ASM5) {
 
-    override fun visitAnnotation(name: String?, desc: String?): AnnotationVisitor {
-        return super.visitAnnotation(name, desc)
-    }
+    private var after: Boolean = false
+    private var exceptionDesc: String? = null
+    private var targets: MutableList<String?> = mutableListOf()
 
     override fun visit(p0: String?, p1: Any?) {
-        LogUtil.debug("visit -> $p0 : $p1")
+        LogUtil.debug("CollectorAnnotationVisitor visit -> $p0 : $p1")
+        when(p0) {
+            "after" -> {
+                after = p1 as Boolean
+            }
+            "exceptionDesc" -> {
+                exceptionDesc = p1 as String?
+            }
+        }
         super.visit(p0, p1)
     }
 
-    override fun visitArray(p0: String?): AnnotationVisitor {
-        LogUtil.debug("visitArray -> $p0")
-        return super.visitArray(p0)
+    override fun visitArray(p0: String?): AnnotationVisitor? {
+        LogUtil.debug("CollectorAnnotationVisitor, visitArray -> $p0")
+        return CollectorArrayAnnotationVisitor(p0, targets)
+    }
+
+    override fun visitEnd() {
+        super.visitEnd()
+        //注解解析在这里结束
+
+        targets.forEach {
+            var injectAnnotation = InjectAnnotation().apply {
+                source = it
+                after = this@CollectorAnnotationVisitor.after
+                desc = this@CollectorAnnotationVisitor.exceptionDesc
+            }
+            CollectorContainer.put(injectAnnotation, method)
+        }
+        LogUtil.debug("CollectorAnnotationVisitor visitEnd...")
     }
 }

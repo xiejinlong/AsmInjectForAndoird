@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)
 public @interface Catch {
-    String[] target = {""};
-    boolean after = false;
-    String exceptionDesc = "";
+    String[] target();
+    boolean after() default false;
+    String exceptionDesc() default  "";
 }
