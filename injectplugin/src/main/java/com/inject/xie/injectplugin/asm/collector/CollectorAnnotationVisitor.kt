@@ -4,7 +4,7 @@ import com.inject.xie.injectplugin.uitls.LogUtil
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Opcodes.ASM5
 
-class CollectorAnnotationVisitor(var method: InjectMethod): AnnotationVisitor(ASM5) {
+class CollectorAnnotationVisitor(var sourceClassName: String?, var method: InjectMethod): AnnotationVisitor(ASM5) {
 
     private var after: Boolean = false
     private var exceptionDesc: String? = null

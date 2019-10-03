@@ -19,4 +19,24 @@ object CollectorContainer {
         }
 
     }
+
+    fun getAnnotationFromSource(source: String?): InjectAnnotation? {
+        var annotation: InjectAnnotation? = null
+        injectMap.forEach{
+            if (it.key.source == source) {
+                annotation = it.key
+            }
+        }
+        return annotation
+    }
+
+    fun getMethodFromSource(source: String?): InjectMethodContainer? {
+        var data: InjectMethodContainer? = null
+        injectMap.forEach{
+            if (it.key.source == source) {
+                data = it.value
+            }
+        }
+        return data
+    }
 }

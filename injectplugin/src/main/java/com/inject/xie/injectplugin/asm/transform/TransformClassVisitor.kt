@@ -1,12 +1,13 @@
 package com.inject.xie.injectplugin.asm.transform
 
-import com.android.dx.dex.file.AnnotationUtils
-import com.inject.xie.injectplugin.asm.collector.CollectorAnnotationUtil
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.ASM5
 
 class TransformClassVisitor(classVisitor: ClassVisitor):
     ClassVisitor(ASM5, classVisitor) {
+
+    var owner: String? = null
+    var isInterface: Boolean = false
 
     override fun visitMethod(
         access: Int,
@@ -15,7 +16,13 @@ class TransformClassVisitor(classVisitor: ClassVisitor):
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        return super.visitMethod(access, name, desc, signature, exceptions)
+        val mv = super.visitMethod(access, name, desc, signature, exceptions)
+        return MethodVisitorChain.handleVisitor(MethodData().apply {
+            onwerName = owner
+            methodName = name
+            methodDes = desc
+            methodAccess = access
+        }, mv)
     }
 
     override fun visitInnerClass(name: String?, outerName: String?, innerName: String?, access: Int) {
@@ -30,15 +37,10 @@ class TransformClassVisitor(classVisitor: ClassVisitor):
         super.visitOuterClass(owner, name, desc)
     }
 
-    override fun visit(
-        version: Int,
-        access: Int,
-        name: String?,
-        signature: String?,
-        superName: String?,
-        interfaces: Array<out String>?
-    ) {
-        super.visit(version, access, name, signature, superName, interfaces)
+    override fun visit(p0: Int, p1: Int, p2: String?, p3: String?, p4: String?, p5: Array<out String>?) {
+        this.owner = p2
+        this.isInterface = p1 and Opcodes.ACC_INTERFACE != 0
+        super.visit(p0, p1, p2, p3, p4,p5)
     }
 
     override fun visitField(access: Int, name: String?, desc: String?, signature: String?, value: Any?): FieldVisitor {

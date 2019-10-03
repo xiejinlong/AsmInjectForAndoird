@@ -9,7 +9,7 @@ class AnnotationCollector {
     fun collectFromInputStream(input: InputStream) {
         val classReader = ClassReader(input)
         val classWriter = ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-        val collector = CollectorClassVisitor("", classWriter)
+        val collector = CollectorClassVisitor(classWriter)
         classReader.accept(collector, 0)
     }
 }

@@ -6,10 +6,11 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-class CollectorClassVisitor(var collectorClassName: String, classVisitor: ClassVisitor) :
+class CollectorClassVisitor(classVisitor: ClassVisitor) :
     ClassVisitor(Opcodes.ASM5, classVisitor) {
 
     var injectClass = false
+    var collectorClassName: String? = null
 
     companion object {
         const val INJECT_DESC = "Lcom/inject/xie/annotation/Inject;"
@@ -21,6 +22,18 @@ class CollectorClassVisitor(var collectorClassName: String, classVisitor: ClassV
             LogUtil.debug("find desc is $desc")
         }
         return super.visitAnnotation(desc, visible)
+    }
+
+    override fun visit(
+        version: Int,
+        access: Int,
+        name: String?,
+        signature: String?,
+        superName: String?,
+        interfaces: Array<out String>?
+    ) {
+        collectorClassName = name
+        super.visit(version, access, name, signature, superName, interfaces)
     }
 
     override fun visitMethod(
@@ -39,7 +52,7 @@ class CollectorClassVisitor(var collectorClassName: String, classVisitor: ClassV
             this.exceptions = exceptions
         }
 
-        return CollectorMethodVisitor(injectMethod)
+        return CollectorMethodVisitor(collectorClassName, injectMethod)
     }
 
 }

@@ -1,42 +1,31 @@
 package com.inject.xie.injectplugin.asm.transform
 
 import com.inject.xie.annotation.Timer
+import com.inject.xie.injectplugin.asm.collector.InjectMethod
 import com.inject.xie.injectplugin.uitls.TypeUtil
-import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
-import org.objectweb.asm.commons.AdviceAdapter
 
-class AddTimerMethodAdapter(var owner: String?, access: Int,
-                            name: String?, desc: String?, mv: MethodVisitor) :
-    AdviceAdapter(Opcodes.ASM4, mv, access, name, desc) {
+class AddTimerMethodAdapter(method: MethodData, mv: MethodVisitor) :
+    BaseMethodAdapter(method, mv) {
 
-    private var isTimer = false
 
-    override fun visitAnnotation(desc: String?, visible: Boolean): AnnotationVisitor {
-        if (TypeUtil.getDesc(Timer::class.java) == desc) {
-            isTimer = true
-        }
-        return super.visitAnnotation(desc, visible)
+    override fun targetHandle(): String {
+        return TypeUtil.getDesc(Timer::class.java)
     }
 
-    override fun onMethodExit(opcode: Int) {
-        if (isTimer) {
-            mv.visitFieldInsn(GETSTATIC, owner, "timer", "J");
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System",
-                "currentTimeMillis", "()J")
-            mv.visitInsn(LADD)
-            mv.visitFieldInsn(PUTSTATIC, owner, "timer", "J");
-        }
-
+    override fun innerMethodExit(opcode: Int, method: InjectMethod) {
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
+        mv.visitVarInsn(LLOAD, 1)
+        mv.visitInsn(LSUB)
+        mv.visitVarInsn(LSTORE, 3)
+        mv.visitMethodInsn(Opcodes.ASM5, method.className, method.name, method.desc)
     }
 
-    override fun onMethodEnter() {
-        if (isTimer) {
-            mv.visitFieldInsn(GETSTATIC, owner, "timer", "J"); mv.visitMethodInsn(INVOKESTATIC, "java/lang/System",
-                "currentTimeMillis", "()J")
-            mv.visitInsn(LSUB)
-            mv.visitFieldInsn(PUTSTATIC, owner, "timer", "J")
-        }
+    override fun innerMethodEnter(method: InjectMethod) {
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+        mv.visitVarInsn(LSTORE, 1)
     }
+
+
 }
