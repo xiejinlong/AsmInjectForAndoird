@@ -1,6 +1,7 @@
 package com.inject.xie.injectplugin.asm.collector
 
 import com.inject.xie.annotation.Around
+import com.inject.xie.annotation.Replace
 import com.inject.xie.annotation.Timer
 import com.inject.xie.annotation.TryCatch
 import com.inject.xie.injectplugin.uitls.TypeUtil
@@ -11,7 +12,8 @@ class CollectorAnnotationUtil  {
             return when(desc) {
                 TypeUtil.getDesc(Around::class.java),
                     TypeUtil.getDesc(TryCatch::class.java),
-                    TypeUtil.getDesc(Timer::class.java)->  {
+                    TypeUtil.getDesc(Timer::class.java),
+                    TypeUtil.getDesc(Replace::class.java) -> {
                     true
                 }
                 else -> {

@@ -10,19 +10,26 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        test()
+        testTimer()
+        testTryCatch()
+        testReplace()
     }
 
-    fun test() {
+    fun testReplace() {
+        Log.e("XJl", "test replace")
+    }
+
+    fun testTryCatch() {
+        Log.e("XJl", "test try catch")
+        val a = 1 / 0
+        val timer: Timer? = null
+        timer.toString()
+    }
+
+    fun testTimer() {
         Log.e("XJl", "test timer...")
         Thread.sleep(500)
-//        val startTime = System.currentTimeMillis()
-//        Log.e("XJl", "1111")
-//        val costTime = System.currentTimeMillis() - startTime
-//        Log.e("costTime", "$costTime")
-//        val a = 1 / 0
-//        val timer: Timer? = null
-//        timer.toString()
+
 
     }
 }
