@@ -14,13 +14,15 @@ class MainActivity : Activity() {
     }
 
     fun test() {
-        val startTime = System.currentTimeMillis()
-        Log.e("XJl", "1111")
-        val costTime = System.currentTimeMillis() - startTime
-        Log.e("costTime", "$costTime")
-        val a = 1 / 0
-        val timer: Timer? = null
-        timer.toString()
+        Log.e("XJl", "test timer...")
+        Thread.sleep(500)
+//        val startTime = System.currentTimeMillis()
+//        Log.e("XJl", "1111")
+//        val costTime = System.currentTimeMillis() - startTime
+//        Log.e("costTime", "$costTime")
+//        val a = 1 / 0
+//        val timer: Timer? = null
+//        timer.toString()
 
     }
 }
