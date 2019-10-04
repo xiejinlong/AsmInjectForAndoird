@@ -1,8 +1,9 @@
-package com.inject.xie.injectplugin.asm.transform
+package com.inject.xie.injectplugin.asm.transform.adapter
 
 import com.inject.xie.injectplugin.asm.collector.CollectorContainer
 import com.inject.xie.injectplugin.asm.collector.InjectMethod
 import com.inject.xie.injectplugin.asm.collector.InjectMethodContainer
+import com.inject.xie.injectplugin.asm.transform.MethodData
 import com.inject.xie.injectplugin.uitls.LogUtil
 import jdk.internal.org.objectweb.asm.Opcodes
 import org.objectweb.asm.MethodVisitor

@@ -2,22 +2,29 @@ package com.inject.xie.asminjectforandroid;
 
 import android.util.Log;
 import com.inject.xie.annotation.*;
+import com.inject.xie.info.SourceProceedPoint;
 
 @Inject
 public class TestInject {
 
 
-    @TryCatch(target = {"com/inject/xie/asminjectforandroid/MainActivity.testTryCatch()V", "View.onMeasure()"}, after = true)
+    @TryCatch(target = {"com/inject/xie/asminjectforandroid/MainActivity.testTryCatch()V"}, after = true)
     public static void test(Exception throwable) {
         Log.e("XJL", "throwable is + " + throwable.getMessage());
 
     }
 
-    @Replace(target = {"com/inject/xie/asminjectforandroid/MainActivity.testReplace()V", "View.onMeasure()"})
+    @Replace(target = {"com/inject/xie/asminjectforandroid/MainActivity.testReplace()V"})
     public static void testReplace() {
         Log.e("XJL", "run replace succeed ->");
     }
 
+    @Proceed(target = {"com/inject/xie/asminjectforandroid/MainActivity.testProceed()V"})
+    public static void testProceed(SourceProceedPoint proceedPoint) {
+        Log.e("XJL", "run proceed before ->");
+        proceedPoint.proceed();
+        Log.e("XJL", "run proceed after ->");
+    }
 
     @Around(target = {"com/inject/xie/asminjectforandroid/MainActivity.testInject()V"}, after = true)
     public static void testInject() {
@@ -29,7 +36,7 @@ public class TestInject {
         Log.e("XJL", "run inject before ->");
     }
 
-    @Timer(target = {"com/inject/xie/asminjectforandroid/MainActivity.testTimer()V", "View.onMeasure()"})
+    @Timer(target = {"com/inject/xie/asminjectforandroid/MainActivity.testTimer()V"})
     public static void handle(long time) {
         Log.e("XJL", "cost time is ->" + time);
     }

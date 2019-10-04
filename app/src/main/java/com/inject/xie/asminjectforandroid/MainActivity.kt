@@ -14,6 +14,11 @@ class MainActivity : Activity() {
         testTryCatch()
         testReplace()
         testInject()
+        testProceed()
+    }
+
+    fun testProceed() {
+        Log.e("XJL", "test proceed...")
     }
 
     fun testReplace() {

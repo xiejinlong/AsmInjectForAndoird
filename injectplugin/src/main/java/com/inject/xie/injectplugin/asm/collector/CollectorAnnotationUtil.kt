@@ -10,6 +10,7 @@ class CollectorAnnotationUtil  {
                 TypeUtil.getDesc(Around::class.java),
                     TypeUtil.getDesc(TryCatch::class.java),
                     TypeUtil.getDesc(Timer::class.java),
+                    TypeUtil.getDesc(Proceed::class.java),
                     TypeUtil.getDesc(Replace::class.java) -> {
                     true
                 }

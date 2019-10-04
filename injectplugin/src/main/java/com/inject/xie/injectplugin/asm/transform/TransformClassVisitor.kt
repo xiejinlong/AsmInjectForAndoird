@@ -1,5 +1,8 @@
 package com.inject.xie.injectplugin.asm.transform
 
+import com.inject.xie.annotation.Inject
+import com.inject.xie.injectplugin.uitls.LogUtil
+import com.inject.xie.injectplugin.uitls.TypeUtil
 import org.objectweb.asm.*
 import org.objectweb.asm.Opcodes.ASM5
 
@@ -8,6 +11,7 @@ class TransformClassVisitor(classVisitor: ClassVisitor):
 
     var owner: String? = null
     var isInterface: Boolean = false
+    var isInjectClass = false
 
     override fun visitMethod(
         access: Int,
@@ -17,6 +21,10 @@ class TransformClassVisitor(classVisitor: ClassVisitor):
         exceptions: Array<out String>?
     ): MethodVisitor {
         val mv = super.visitMethod(access, name, desc, signature, exceptions)
+        if (isInjectClass) {
+            LogUtil.debug("this class is inject class, just continue")
+            return mv
+        }
         return MethodVisitorChain.handleVisitor(MethodData().apply {
             onwerName = owner
             methodName = name
@@ -52,6 +60,7 @@ class TransformClassVisitor(classVisitor: ClassVisitor):
     }
 
     override fun visitAnnotation(desc: String?, visible: Boolean): AnnotationVisitor {
+        isInjectClass = desc == TypeUtil.getDesc(Inject::class.java)
         return super.visitAnnotation(desc, visible)
     }
 
