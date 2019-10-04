@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Proceed {
     String[] target();
+    boolean extend() default false;
 }

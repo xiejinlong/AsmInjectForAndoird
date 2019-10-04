@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import java.util.*
 
-class MainActivity : Activity() {
+class MainActivity : BaseTestActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +36,8 @@ class MainActivity : Activity() {
         timer.toString()
     }
 
-    fun testTimer() {
+    override fun testTimer() {
         Log.e("XJl", "test timer...")
         Thread.sleep(500)
-
-
     }
 }

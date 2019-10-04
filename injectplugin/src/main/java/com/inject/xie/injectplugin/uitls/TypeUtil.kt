@@ -8,5 +8,6 @@ class TypeUtil {
         fun getDesc(clazz: Class<*>): String {
             return Type.getDescriptor(clazz)
         }
+
     }
 }

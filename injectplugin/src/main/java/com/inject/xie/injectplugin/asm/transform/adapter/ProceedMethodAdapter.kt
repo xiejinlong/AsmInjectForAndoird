@@ -14,7 +14,6 @@ class ProceedMethodAdapter(method: MethodData, mv: MethodVisitor) :
     }
 
     override fun innerMethodExit(opcode: Int, method: InjectMethod) {
-
     }
 
     override fun innerMethodEnter(method: InjectMethod) {

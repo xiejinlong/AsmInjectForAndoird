@@ -36,7 +36,7 @@ public class TestInject {
         Log.e("XJL", "run inject before ->");
     }
 
-    @Timer(target = {"com/inject/xie/asminjectforandroid/MainActivity.testTimer()V"})
+    @Timer(target = {"com/inject/xie/asminjectforandroid/MainActivity.testTimer()V"}, extend = true)
     public static void handle(long time) {
         Log.e("XJL", "cost time is ->" + time);
     }

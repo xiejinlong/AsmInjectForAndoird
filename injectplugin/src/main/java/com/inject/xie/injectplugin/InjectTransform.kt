@@ -5,6 +5,7 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.utils.FileUtils
 import org.gradle.api.Project
 import com.inject.xie.injectplugin.asm.collector.AnnotationCollector
+import com.inject.xie.injectplugin.asm.collector.ReflectUtil
 import com.inject.xie.injectplugin.asm.transform.ClassTransform
 import com.inject.xie.injectplugin.asm.transform.InputTransformHelper
 import com.inject.xie.injectplugin.uitls.LogUtil
@@ -23,6 +24,7 @@ class InjectTransform(var project: Project) : Transform() {
         LogUtil.debug("xjl........1")
         super.transform(transformInvocation)
         transformInvocation ?: return
+        ReflectUtil.initClassLoader(transformInvocation, project)
         val outputProvider = transformInvocation.outputProvider
         val inputs = transformInvocation.inputs
         val isIncremental = transformInvocation.isIncremental

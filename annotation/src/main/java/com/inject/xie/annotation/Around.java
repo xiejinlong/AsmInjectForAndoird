@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface Around {
     String[] target();
     boolean after() default false;
+    boolean extend() default false;
 }

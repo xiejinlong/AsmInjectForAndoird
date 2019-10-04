@@ -6,18 +6,28 @@ import org.objectweb.asm.Opcodes.ASM5
 
 class CollectorAnnotationVisitor(var method: InjectMethod): AnnotationVisitor(ASM5) {
 
+    companion object {
+        const val TYPE_AFTER = "after"
+        const val TYPE_EXTEND = "extend"
+        const val TYPE_EXCEPTION = "exceptionDesc"
+    }
+
     private var after: Boolean = false
     private var exceptionDesc: String? = null
     private var targets: MutableList<String?> = mutableListOf()
+    private var extend: Boolean = false
 
     override fun visit(p0: String?, p1: Any?) {
         LogUtil.debug("CollectorAnnotationVisitor visit -> $p0 : $p1")
         when(p0) {
-            "after" -> {
+            TYPE_AFTER -> {
                 after = p1 as Boolean
             }
-            "exceptionDesc" -> {
+            TYPE_EXCEPTION -> {
                 exceptionDesc = p1 as String?
+            }
+            TYPE_EXTEND  -> {
+                this.extend = p1 as Boolean
             }
         }
         super.visit(p0, p1)
@@ -33,12 +43,39 @@ class CollectorAnnotationVisitor(var method: InjectMethod): AnnotationVisitor(AS
         //注解解析在这里结束
 
         targets.forEach {
+
             CollectorContainer.put(it, method.apply {
+                extend = this@CollectorAnnotationVisitor.extend
                 after = this@CollectorAnnotationVisitor.after
                 exceptionDesc = this@CollectorAnnotationVisitor.exceptionDesc
             })
 
+            if (extend) {
+                //同时添加父类
+                splitAbsString(it)
+            }
+
         }
         LogUtil.debug("CollectorAnnotationVisitor visitEnd...")
     }
+
+    private fun splitAbsString(absName: String?) {
+        absName?:return
+        val splitArray = absName.split('.')
+        val methodSplit = splitArray[1].split('(')
+        var superClass = ReflectUtil.getSuperClass(splitArray[0].replace('/', '.'))
+
+        while (ReflectUtil.containMethod(superClass,
+                methodSplit[0], "(${methodSplit[1]}")) {
+            CollectorContainer.put(superClass!!.name, method.apply {
+                extend = this@CollectorAnnotationVisitor.extend
+                after = this@CollectorAnnotationVisitor.after
+                exceptionDesc = this@CollectorAnnotationVisitor.exceptionDesc
+            })
+            superClass = superClass.superclass
+        }
+    }
+
+
+
 }

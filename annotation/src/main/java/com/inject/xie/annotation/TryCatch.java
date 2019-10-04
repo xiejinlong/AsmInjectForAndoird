@@ -11,4 +11,5 @@ public @interface TryCatch {
     String[] target();
     boolean after() default false;
     String exceptionDesc() default  "";
+    boolean extend() default false;
 }
