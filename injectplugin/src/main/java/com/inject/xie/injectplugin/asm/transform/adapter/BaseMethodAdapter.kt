@@ -15,9 +15,8 @@ abstract class BaseMethodAdapter(var methodData: MethodData, mv: MethodVisitor)
 
     var sourceMethod: InjectMethodContainer? = null
     init {
-        if(methodData.onwerName == "com/inject/xie/asminjectforandroid/MainActivity") {
-            LogUtil.debug("total name is - > ${methodData.generateAbsName()}")
-        }
+        LogUtil.debug("total name is - > ${methodData.generateAbsName()}")
+
         sourceMethod = CollectorContainer.getMethodFromSource(methodData.generateAbsName())
     }
 

@@ -67,13 +67,17 @@ class CollectorAnnotationVisitor(var method: InjectMethod): AnnotationVisitor(AS
 
         while (ReflectUtil.containMethod(superClass,
                 methodSplit[0], "(${methodSplit[1]}")) {
-            CollectorContainer.put(superClass!!.name, method.apply {
+            CollectorContainer.put(genearateSaveName(superClass!!.name, methodSplit[0], "(${methodSplit[1]}"), method.apply {
                 extend = this@CollectorAnnotationVisitor.extend
                 after = this@CollectorAnnotationVisitor.after
                 exceptionDesc = this@CollectorAnnotationVisitor.exceptionDesc
             })
             superClass = superClass.superclass
         }
+    }
+
+    private fun genearateSaveName(className: String, methodName: String, methodDesc: String): String {
+        return className.replace('.', '/') +  "." + methodName + methodDesc
     }
 
 
