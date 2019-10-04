@@ -8,7 +8,8 @@ class MethodVisitorChain {
             val addTimer = AddTimerMethodAdapter(methodData, mv)
             val tryCatch = AddTryCatchMethodAdapter(methodData, addTimer)
             val replace = ReplaceMethodAdapter(methodData, tryCatch)
-            return replace
+            val inject = InjectMethodAdapter(methodData, replace)
+            return inject
         }
     }
 

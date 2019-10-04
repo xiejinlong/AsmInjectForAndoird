@@ -1,9 +1,6 @@
 package com.inject.xie.injectplugin.asm.collector
 
-import com.inject.xie.annotation.Around
-import com.inject.xie.annotation.Replace
-import com.inject.xie.annotation.Timer
-import com.inject.xie.annotation.TryCatch
+import com.inject.xie.annotation.*
 import com.inject.xie.injectplugin.uitls.TypeUtil
 
 class CollectorAnnotationUtil  {

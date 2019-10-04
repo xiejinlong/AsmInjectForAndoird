@@ -13,10 +13,15 @@ class MainActivity : Activity() {
         testTimer()
         testTryCatch()
         testReplace()
+        testInject()
     }
 
     fun testReplace() {
         Log.e("XJl", "test replace")
+    }
+
+    fun testInject() {
+        Log.e("XJl", "test inject")
     }
 
     fun testTryCatch() {

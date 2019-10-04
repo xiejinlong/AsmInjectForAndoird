@@ -52,7 +52,7 @@ class CollectorClassVisitor(classVisitor: ClassVisitor) :
             this.exceptions = exceptions
         }
 
-        return CollectorMethodVisitor(collectorClassName, injectMethod)
+        return CollectorMethodVisitor(injectMethod)
     }
 
 }

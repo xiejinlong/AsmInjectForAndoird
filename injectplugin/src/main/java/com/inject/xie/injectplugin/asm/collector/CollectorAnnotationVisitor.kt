@@ -4,7 +4,7 @@ import com.inject.xie.injectplugin.uitls.LogUtil
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Opcodes.ASM5
 
-class CollectorAnnotationVisitor(var sourceClassName: String?, var method: InjectMethod): AnnotationVisitor(ASM5) {
+class CollectorAnnotationVisitor(var method: InjectMethod): AnnotationVisitor(ASM5) {
 
     private var after: Boolean = false
     private var exceptionDesc: String? = null
@@ -33,12 +33,11 @@ class CollectorAnnotationVisitor(var sourceClassName: String?, var method: Injec
         //注解解析在这里结束
 
         targets.forEach {
-            var injectAnnotation = InjectAnnotation().apply {
-                source = it
+            CollectorContainer.put(it, method.apply {
                 after = this@CollectorAnnotationVisitor.after
-                desc = this@CollectorAnnotationVisitor.exceptionDesc
-            }
-            CollectorContainer.put(injectAnnotation, method)
+                exceptionDesc = this@CollectorAnnotationVisitor.exceptionDesc
+            })
+
         }
         LogUtil.debug("CollectorAnnotationVisitor visitEnd...")
     }

@@ -42,18 +42,21 @@ class ReplaceMethodAdapter(var methodData: MethodData, mv: MethodVisitor)
             mv.visitMethodInsn(opcode, owner, name, desc, itf)
             return
         }
+        var hasReplace = false
         sourceMethod?.injectMethods?.forEach {
             if (targetHandle() == it.annotationDesc) {
                 try {
+                    hasReplace = true
                     mv.visitMethodInsn(INVOKESTATIC, it.className,
                         it.name, "()V", false)
                 } catch (e: Exception) {
-                    mv.visitMethodInsn(opcode, owner, name, desc, itf)
+                    hasReplace = false
                     LogUtil.debug("invoke try catch method exception, ${e.message}")
                 }
-            } else {
-                mv.visitMethodInsn(opcode, owner, name, desc, itf)
             }
+        }
+        if (!hasReplace) {
+            mv.visitMethodInsn(opcode, owner, name, desc, itf)
         }
     }
 }

@@ -1,10 +1,7 @@
 package com.inject.xie.asminjectforandroid;
 
 import android.util.Log;
-import com.inject.xie.annotation.Replace;
-import com.inject.xie.annotation.Timer;
-import com.inject.xie.annotation.TryCatch;
-import com.inject.xie.annotation.Inject;
+import com.inject.xie.annotation.*;
 
 @Inject
 public class TestInject {
@@ -19,6 +16,17 @@ public class TestInject {
     @Replace(target = {"com/inject/xie/asminjectforandroid/MainActivity.testReplace()V", "View.onMeasure()"})
     public static void testReplace() {
         Log.e("XJL", "run replace succeed ->");
+    }
+
+
+    @Around(target = {"com/inject/xie/asminjectforandroid/MainActivity.testInject()V"}, after = true)
+    public static void testInject() {
+        Log.e("XJL", "run inject after ->");
+    }
+
+    @Around(target = {"com/inject/xie/asminjectforandroid/MainActivity.testInject()V"}, after = false)
+    public static void testInject1() {
+        Log.e("XJL", "run inject before ->");
     }
 
     @Timer(target = {"com/inject/xie/asminjectforandroid/MainActivity.testTimer()V", "View.onMeasure()"})
