@@ -24,6 +24,7 @@ class InjectTransform(var project: Project) : Transform() {
         LogUtil.debug("xjl........1")
         super.transform(transformInvocation)
         transformInvocation ?: return
+        LogUtil.initFileLogger(project)
         ReflectUtil.initClassLoader(transformInvocation, project)
         val outputProvider = transformInvocation.outputProvider
         val inputs = transformInvocation.inputs
