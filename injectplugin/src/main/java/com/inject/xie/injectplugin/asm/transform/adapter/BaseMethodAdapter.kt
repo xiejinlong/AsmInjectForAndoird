@@ -15,8 +15,6 @@ abstract class BaseMethodAdapter(var methodData: MethodData, mv: MethodVisitor)
 
     var sourceMethod: InjectMethodContainer? = null
     init {
-        LogUtil.debug("total name is - > ${methodData.generateAbsName()}")
-
         sourceMethod = CollectorContainer.getMethodFromSource(methodData.generateAbsName())
     }
 

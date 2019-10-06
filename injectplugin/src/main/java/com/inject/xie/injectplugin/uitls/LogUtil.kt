@@ -1,8 +1,5 @@
 package com.inject.xie.injectplugin.uitls
 
-import org.gradle.api.Project
-import org.gradle.api.logging.LogLevel
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class LogUtil {

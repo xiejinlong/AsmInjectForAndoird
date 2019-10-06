@@ -9,6 +9,11 @@ import java.io.File
 import java.io.FileInputStream
 import java.net.URL
 import java.net.URLClassLoader
+import org.gradle.api.plugins.JavaPluginConvention
+import org.codehaus.groovy.vmplugin.VMPluginFactory.getPlugin
+import org.gradle.api.tasks.SourceSetContainer
+
+
 
 object ReflectUtil {
 
@@ -45,7 +50,11 @@ object ReflectUtil {
     }
 
     fun getClass(absClassName: String): Class<*>? {
-        return classLoader!!.loadClass(absClassName)
+        val absName = absClassName.trim()
+        if (absName.startsWith("java.")) {
+            return Class.forName(absName)
+        }
+        return classLoader!!.loadClass(absName)
     }
 
     fun getSuperClass(absClassName: String): Class<*>? {
@@ -64,7 +73,9 @@ object ReflectUtil {
         return false
     }
 
-    fun containMethod(absClassName: String, methodName: String, methodDesc: String): Boolean {
+    fun containMethod(absClassName: String,
+                      methodName: String,
+                      methodDesc: String): Boolean {
         val clazz = getClass(absClassName)?.superclass
         clazz?.declaredMethods?.forEach {
             if (methodName == it.name) {
@@ -76,5 +87,6 @@ object ReflectUtil {
         }
         return false
     }
+
 
 }

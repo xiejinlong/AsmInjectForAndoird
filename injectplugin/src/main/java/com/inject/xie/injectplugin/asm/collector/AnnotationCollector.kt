@@ -1,6 +1,7 @@
 package com.inject.xie.injectplugin.asm.collector
 
 import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassReader.EXPAND_FRAMES
 import org.objectweb.asm.ClassWriter
 import java.io.InputStream
 
@@ -10,6 +11,6 @@ class AnnotationCollector {
         val classReader = ClassReader(input)
         val classWriter = ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
         val collector = CollectorClassVisitor(classWriter)
-        classReader.accept(collector, 0)
+        classReader.accept(collector, EXPAND_FRAMES)
     }
 }

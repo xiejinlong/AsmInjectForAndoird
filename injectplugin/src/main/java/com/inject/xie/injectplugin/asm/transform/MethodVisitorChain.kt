@@ -9,11 +9,13 @@ import org.objectweb.asm.MethodVisitor
 class MethodVisitorChain {
     companion object {
         fun handleVisitor(methodData: MethodData, mv: MethodVisitor): MethodVisitor {
-            val addTimer = AddTimerMethodAdapter(methodData, mv)
             val tryCatch =
-                AddTryCatchMethodAdapter(methodData, addTimer)
-            val replace = ReplaceMethodAdapter(methodData, tryCatch)
+                AddTryCatchMethodAdapter(methodData, mv)
+            val addTimer = AddTimerMethodAdapter(methodData, tryCatch)
+
+            val replace = ReplaceMethodAdapter(methodData, addTimer)
             val inject = InjectMethodAdapter(methodData, replace)
+
             return inject
         }
     }

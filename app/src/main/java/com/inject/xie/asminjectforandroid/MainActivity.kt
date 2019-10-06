@@ -1,8 +1,8 @@
 package com.inject.xie.asminjectforandroid
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import org.json.JSONObject
 import java.util.*
 
 class MainActivity : BaseTestActivity() {
@@ -15,6 +15,14 @@ class MainActivity : BaseTestActivity() {
         testReplace()
         testInject()
         testProceed()
+
+        val json = JSONObject()
+        json.put("key", "test json")
+        Log.e("XJL", "testAnnotationValue result is -> ${testAnnotationValue(json, "")}" )
+    }
+
+    fun testAnnotationValue(json: JSONObject, a: String): String {
+        return json.toString()
     }
 
     fun testProceed() {
